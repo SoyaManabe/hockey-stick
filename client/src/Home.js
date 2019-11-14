@@ -4,7 +4,18 @@ import {
   BarChart, Bar, Brush, ReferenceLine, XAxis, YAxis,
   CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
+import axios from 'axios';
 
+import {Button, Header, Modal, Icon, Form, Select} from 'semantic-ui-react'
+
+  const Options = [
+    {key:"tr", value:"tr", text:"Transport"},
+    {key:"fo", value:"fo", text:"Food"},
+    {key:"bo", value:"bo", text:"Book"},
+    {key:"ni", value:"ni", text:"Nichi"},
+    {key:"jo", value:"jo", text:"Jou"},
+    {key:"ke", value:"ke", text:"KEi"},
+  ]
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -12,13 +23,37 @@ class Home extends React.Component {
       sums: [],
     };
     this.serverRequest = this.serverRequest.bind(this);
+    this.postRequest = this.postRequest.bind(this);
   }
-  serverRequest(){
-    $.get("http://localhost:5000/api/logs/sums", res => {
-      console.log(res);
-      this.setState({
-        sums: res
-      });
+
+ serverRequest() {
+   axios.get('http://localhost:5000/api/logs/items')
+    .then(function (response) {
+        console.log(response);
+        this.setState({
+          sums: response
+        });
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+    .finally(function () {
+
+    });
+ }
+
+  postRequest() {
+    axios.post('http://localhost:5000/api/logs/items', {
+      'name':'tea',
+      'category': 'food',
+      'price': 120,
+      'date': '2019/11/12'
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
     });
   }
   componentDidMount(){
@@ -31,10 +66,61 @@ class Home extends React.Component {
           <h1>Hello, Soya</h1>
         </div>
         <div className="row centered">
+          <AddRecord postRequest={this.postRequest}/>
+        </div>
+        <div className="row centered">
           <Chart className="column" datas={this.state.sums}/>
           <RenderPrice className="column" datas={this.state.sums}/>
         </div>
       </div>
+    )
+  }
+}
+class AddRecord extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      open: false
+    }; 
+  }
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
+  render() {
+    return(
+      <Modal trigger={
+        <Button onClick={this.open} className="ui primary button">
+          <i className="money icon"></i> Add Record
+        </Button>}
+        open={this.state.open}
+        onClose={this.close}
+        basic
+        size='small'
+      >
+        <Modal.Header>Add a new Record</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            <Header>Detail</Header>
+            <Form>
+              <Form.Field>
+                <label>Name</label>
+                <input placeholder="Name"/>
+              </Form.Field>
+              <Form.Field>
+                <label>Category</label>
+                <Select placeholder='Select Category' options={Options}/>
+              </Form.Field>
+              <Form.Field>
+                <label>Price</label>
+                <input placeholder="Price"/>
+              </Form.Field>
+              <Button onClick={this.props.postRequest}>Submit</Button>
+              <Button onClick={this.close} negative>
+                <Icon name='remove'/>Cancel
+              </Button>
+            </Form>
+          </Modal.Description>
+        </Modal.Content>
+      </Modal>
     )
   }
 }

@@ -2,6 +2,8 @@ import $ from 'jquery';
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Home from './Home';
+import Intro from './Intro';
 
 import { Container } from "semantic-ui-react"
 
@@ -11,8 +13,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       items: [],
-      activeArray:["","","",""],
-      page:0,
+      activeArray:["","active","",""],
+      page:1,
     };
     this.clickHeader = this.clickHeader.bind(this);
     this.serverRequest = this.serverRequest.bind(this);
@@ -51,28 +53,6 @@ class App extends React.Component {
         </div>
         </Container>
       </div>  
-    )
-  }
-}
-
-class Intro extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return(
-      <h1>Here is Introduction of Hockey Stick</h1>
-    )
-  }
-}
-
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return(
-      <h1>Here is Home of your hockey</h1>
     )
   }
 }
@@ -131,12 +111,6 @@ function Item(props) {
       <td>{props.item.category}</td>
       <td>¥{props.item.price}</td>
     </tr>
-  )
-}
-
-function Hello(props) {
-  return (
-    <h1>Hello</h1>
   )
 }
 
