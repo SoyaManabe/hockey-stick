@@ -32,8 +32,6 @@ func (s Service) CreateModel(c *gin.Context) (Item, error) {
 	var i Item
 
 	if err := c.BindJSON(&i); err != nil {
-
-		log.Printf("Whatnareudoingmen");
 		return i, err
 	}
 

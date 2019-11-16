@@ -31,14 +31,12 @@ class App extends React.Component {
       console.log(res);
       this.setState({
         items: res
-      },()=>{
-        console.log(this.state.items[0].name)
       });
-    });
+    })
+
   }
   componentDidMount(){
     this.serverRequest();
-    console.log(this.state.items[2])
   }
   render() {
     return (
@@ -95,7 +93,7 @@ function ItemTable(props) {
         </thead>
         <tbody>
           {props.items.map(item => (
-            <Item item={item}/>
+            <Item key={item.id} item={item}/>
           ))}
         </tbody>
       </table>
@@ -105,7 +103,7 @@ function ItemTable(props) {
 
 function Item(props) {
   return (
-    <tr key={props.item.id}>
+    <tr>
       <td>{props.item.date}</td>
       <td>{props.item.name}</td>
       <td>{props.item.category}</td>
